@@ -104,6 +104,10 @@
     const ordenMinuscula = orden.toLowerCase();
 
     // Verificar la orden y ejecutar la acción correspondiente
+    if (ordenMinuscula.includes('abrir una pestaña')) {
+    // Si la orden contiene la palabra clave, abrir en una nueva pestaña
+    window.open('https://www.ejemplo.com/', '_blank');
+}
     if (ordenMinuscula.includes('youtube')) {
         // Si la orden contiene la palabra "youtube", redirigir a YouTube
         window.location.href = 'https://www.youtube.com/';
