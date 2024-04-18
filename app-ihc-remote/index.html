@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ordenador de voz</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Estilo personalizado para el header */
+    header {
+      background-color: #6ab3fc;
+      color: #ffffff;
+      padding: 20px 0;
+    }
+
+    /* Estilo personalizado para el footer */
+    footer {
+      background-color: #6ab3fc;
+      color: #ffffff;
+      padding: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="row justify-content-between align-items-center">
+        <div class="col-md-3">
+          <h1>EJECUCION DE ORDENES IHC</h1>
+        </div>
+        <div class="col-md-9">
+          <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <!-- Contenido principal -->
+<div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8">
+        <h1>Bienvenido a Mi Sitio</h1>
+        <p>En este sitio podrás ejecutar órdenes de IHC.</p>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <label for="inputPassword5" class="form-label">Orden para ejecutar:</label>
+            <span class="form-control" id="orden">
+                <h4 id="orden-texto">Última orden ejecutada</h4>
+            </span>
+            <!-- Botón para actualizar la orden -->
+            <button id= "boton-actualizar-orden" class="btn btn-primary mt-3" onclick="leerFraseAFirebase()">Actualizar Orden</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h3>Contacto</h3>
+          <p>Puedes ponerte en contacto con nosotros a través de los siguientes medios:</p>
+          <ul>
+            <li>Email: candidof880@gmail.com</li>
+            <li>Teléfono: 7714463805</li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <p>Derechos de autor © 2024 Mi Sitio. Francisco Candido Gómez.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS y dependencias Popper.js y jQuery (requeridas para los componentes de Bootstrap) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+  <!-- Axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <!-- JavaScript personalizado -->
+  <script>
+  function ejecutarOrden(orden) {
+    // Convertir la orden a minúsculas para evitar errores de capitalización
+    const ordenMinuscula = orden.toLowerCase();
+
+    // Verificar la orden y ejecutar la acción correspondiente
+    if (ordenMinuscula.includes('youtube')) {
+        // Si la orden contiene la palabra "youtube", redirigir a YouTube
+        window.location.href = 'https://www.youtube.com/';
+    } else if (ordenMinuscula.includes('ir a una página')) {
+        // Si la orden contiene la frase "ir a una página", redirigir a la página de ChatGPT
+        window.location.href = 'https://www.chatgpt.com/';
+    } else {
+        // Si la orden no coincide con ningún caso específico, puedes agregar más casos aquí
+        // Por ejemplo, abrir una ventana con la orden actual
+        function cerrarPestana() {
+            window.close();
+    }
+}
+  }
+// Función para leer la frase desde Firebase (ya la tienes implementada)
+function leerFraseAFirebase() {
+    axios.get('https://661215a995fdb62f24ee0845.mockapi.io/detector')
+        .then(response => {
+            console.log('Lectura exitosa:', response.data);
+            // Convertir el JSON de respuesta a un array
+            const jsonArray = response.data;
+            const array = Object.entries(jsonArray);
+            console.log('Array resultante:', array);
+
+            // Actualizar el contenido de un elemento en el DOM
+            const ultimoRegistro = array[array.length - 1];
+            const ordenTexto = document.getElementById('orden-texto');
+            ordenTexto.textContent = ultimoRegistro[1].frase;
+
+            // Ejecutar la orden obtenida
+            ejecutarOrden(ultimoRegistro[1].frase);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+// Agregar evento de clic al botón para leer la frase desde Firebase y ejecutar la orden
+document.getElementById('boton-actualizar-orden').addEventListener('click', function() {
+    leerFraseAFirebase();
+});
+</script>
+</body>
+</html>
